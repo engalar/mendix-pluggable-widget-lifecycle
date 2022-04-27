@@ -1,6 +1,6 @@
 {
-  "name": "graph",
-  "widgetName": "Graph",
+  "name": "lifecycle",
+  "widgetName": "Lifecycle",
   "version": "1.0.1",
   "description": "My widget description",
   "packagePath": "mendixcn",
