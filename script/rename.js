@@ -8,65 +8,49 @@ readXml("./src/package.xml", json => {
 
   if (oldWidgetName !== packageConfig.widgetName) {
     //#region rename 
-    fs.rename(`./typings/${oldWidgetName}Props.d.ts`, `./typings/${packageConfig.widgetName}Props.d.ts`, e => {
-      e ? console.log('ERROR: ' + e) : null;
-    });
+    fs.renameSync(`./typings/${oldWidgetName}Props.d.ts`, `./typings/${packageConfig.widgetName}Props.d.ts`);
+    fs.renameSync(`./src/${oldWidgetName}.xml`, `./src/${packageConfig.widgetName}.xml`);
 
-    fs.rename(`./src/${oldWidgetName}.xml`, `./src/${packageConfig.widgetName}.xml`, function (err) {
-      if (err) console.log('ERROR: ' + err);
+    //#region WidgetName.tsx
+    (function () {
+      fs.renameSync(`./src/${oldWidgetName}.tsx`, `./src/${packageConfig.widgetName}.tsx`);
+      const data = fs.readFileSync(`./src/${packageConfig.widgetName}.tsx`, { encoding: 'utf8' });
+      var result = data
+        .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
+        .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
+      fs.writeFileSync(`./src/${packageConfig.widgetName}.tsx`, result, 'utf8');
+    })();
+    //#endregion
+
+    //#region  editorPreview.tsx
+    (function () {
+      fs.renameSync(`./src/${oldWidgetName}.editorPreview.tsx`, `./src/${packageConfig.widgetName}.editorPreview.tsx`);
+
+      const data = fs.readFileSync(`./src/${packageConfig.widgetName}.editorPreview.tsx`, { encoding: 'utf8' });
+
+      var result = data
+        .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
+        .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
+
+      fs.writeFileSync(`./src/${packageConfig.widgetName}.editorPreview.tsx`, result, { encoding: 'utf8' });
+    })();
+    //#endregion
 
 
-    });
+    //#region editorConfig.ts
+    (function () {
+      fs.renameSync(`./src/${oldWidgetName}.editorConfig.ts`, `./src/${packageConfig.widgetName}.editorConfig.ts`);
 
-    fs.rename(`./src/${oldWidgetName}.tsx`, `./src/${packageConfig.widgetName}.tsx`, function (err) {
-      if (err) console.log('ERROR: ' + err);
-      fs.readFile(`./src/${packageConfig.widgetName}.tsx`, 'utf8', function (err2, data) {
-        if (err2) {
-          return console.log(err2);
-        }
-        var result = data
-          .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
-          .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
+      const data = fs.readFileSync(`./src/${packageConfig.widgetName}.editorConfig.ts`, 'utf8');
 
-        fs.writeFile(`./src/${packageConfig.widgetName}.tsx`, result, 'utf8', function (err2) {
-          if (err2) return console.log(err2);
-        });
-      });
+      var result = data
+        .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
+        .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
 
-    });
+      fs.writeFileSync(`./src/${packageConfig.widgetName}.editorConfig.ts`, result, { encoding: 'utf8' });
+    })();
+    //#endregion
 
-    fs.rename(`./src/${oldWidgetName}.editorPreview.tsx`, `./src/${packageConfig.widgetName}.editorPreview.tsx`, function (err) {
-      if (err) console.log('ERROR: ' + err);
-      fs.readFile(`./src/${packageConfig.widgetName}.editorPreview.tsx`, 'utf8', function (err2, data) {
-        if (err2) {
-          return console.log(err2);
-        }
-        var result = data
-          .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
-          .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
-
-        fs.writeFile(`./src/${packageConfig.widgetName}.editorPreview.tsx`, result, 'utf8', function (err2) {
-          if (err2) return console.log(err2);
-        });
-      });
-    });
-
-    fs.rename(`./src/${oldWidgetName}.editorConfig.ts`, `./src/${packageConfig.widgetName}.editorConfig.ts`, function (err) {
-      if (err) console.log('ERROR: ' + err);
-      fs.readFile(`./src/${packageConfig.widgetName}.editorConfig.ts`, 'utf8', function (err2, data) {
-        if (err2) {
-          return console.log(err2);
-        }
-        var result = data
-          .replace(new RegExp(`${oldWidgetName}Props`, 'g'), `${packageConfig.widgetName}Props`)
-          .replace(new RegExp(`${oldWidgetName}PreviewProps`, 'g'), `${packageConfig.widgetName}PreviewProps`);
-
-        fs.writeFile(`./src/${packageConfig.widgetName}.editorConfig.ts`, result, 'utf8', function (err2) {
-          if (err2) return console.log(err2);
-        });
-      });
-
-    });
     console.log('rename: done');
     //#endregion
   } else {
