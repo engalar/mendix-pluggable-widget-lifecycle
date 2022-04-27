@@ -1,18 +1,11 @@
-import { createElement, useMemo } from "react";
+import { createElement } from "react";
 import { LifecycleContainerProps } from "../typings/LifecycleProps";
-import { ValueStatus } from "mendix";
+import { useMount } from "ahooks";
 
 export default function (props: LifecycleContainerProps) {
-    console.log(eval("{a:1}"));
-    const value = useMemo(() => {
-        if (props.attribute && props.attribute.status === ValueStatus.Available) {
-            return props.attribute.value;
-        }
-    }, [props.attribute]);
+    useMount(() => {
+        props.actionMount?.execute();
+    });
 
-    return (
-        <div>
-            hello {props.sampleText} and your value is {value}
-        </div>
-    );
+    return <div>{props.content}</div>;
 }

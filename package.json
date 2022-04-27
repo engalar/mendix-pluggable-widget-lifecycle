@@ -1,7 +1,7 @@
 {
   "name": "lifecycle",
   "widgetName": "Lifecycle",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "My widget description",
   "packagePath": "mendixcn",
   "author": "wengao.liu@siemens.com",
